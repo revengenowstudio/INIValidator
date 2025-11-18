@@ -3,7 +3,7 @@ build/*
 debug/*
 release/*
 x64/*
-INIValidater/*
+DllLoadTest/*
 INIValidator/*
 .vs/*
 *.pyc
