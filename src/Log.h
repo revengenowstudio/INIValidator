@@ -135,6 +135,9 @@ public:
 
 	std::string getFileMessage() const;
 	std::string getPrintMessage() const;
+	Severity getSeverity() const {
+		return severity;
+	}
 
 	bool operator<(const LogStream& r) const {
 		return data < r.data;

@@ -12,19 +12,36 @@ Validator& Validator::Instance() {
 }
 
 void Validator::LoadBootSetting(const std::string& path) {
-	Settings::Settings(IniFile(path, true));// will set into global instance
+	bootSettingIni = std::make_unique<IniFile>(path, true);// will set into global instance
+	bootSettings = std::make_unique<Settings>(*bootSettingIni);
 }
 void Validator::ReloadConfigRule(const std::string& path) {
 	configIni = std::make_unique<IniFile>(path, true);
 }
 
-bool Validator::Validate(const std::string& targetFilePath) {
+bool Validator::Validate(
+	const std::string& targetFilePath,
+	ValidateResults& errors,
+	ValidateResults& others) {
 	if (!configIni) {
 		return false;
 	}
-	IniFile targetIni(targetFilePath);
-	Checker checker(*configIni, targetIni);
+	IniFile targetIni;
+	IniFile::FileType = "rules";
+	targetIni.load(targetFilePath, true);
+	Checker checker(*configIni, targetIni, false);
 	checker.checkFile();
-	// TODO: find a way to determine passed or not
-	return true;
+
+	size_t errCount = 0;
+	for (const auto& log : Log::Logs) {
+		auto&& msg = log.getFileMessage();
+		if (log.getSeverity() == Severity::ERROR) {
+			errCount++;
+			errors.emplace_back(std::move(msg));
+			continue;
+		}
+		others.emplace_back(std::move(msg));
+	}
+
+	return errCount == 0;
 }
