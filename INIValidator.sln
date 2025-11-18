@@ -6,6 +6,9 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "INIValidator", "INICodingCheck.vcxproj", "{D435C497-A982-44FB-9386-77991A9FB854}"
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DllLoadTest", "DllLoadTest\DllLoadTest.vcxproj", "{0B5B2265-3F78-42AA-B5C6-ADA7DA72CCF1}"
+	ProjectSection(ProjectDependencies) = postProject
+		{D435C497-A982-44FB-9386-77991A9FB854} = {D435C497-A982-44FB-9386-77991A9FB854}
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
