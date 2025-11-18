@@ -10,10 +10,12 @@
 Checker* Checker::Instance = nullptr;
 std::atomic<size_t> Checker::ProcessedSections(0);
 
-Checker::Checker(IniFile& configFile, IniFile& targetIni) : targetIni(&targetIni) {
+Checker::Checker(IniFile& configFile, IniFile& targetIni, bool allowCustomChecker) : targetIni(&targetIni) {
 	loadConfig(configFile);
 	Instance = this;
-	scripts = std::make_unique<CustomChecker>("Scripts", targetIni);
+	if (allowCustomChecker) {
+		scripts = std::make_unique<CustomChecker>("Scripts", targetIni);
+	}
 }
 
 // 加载配置文件
@@ -119,7 +121,7 @@ void Checker::validate(const Section& section, const std::string& key, const Val
 	else if (lists.contains(type)) lists.at(type).validate(section, key, value); // 新增
 	//else if (registries.contains(type)) registries.at(type).validate(section, key, value, type);
 	else if (sections.contains(type)) TypeChecker::validate(section, key, value, type);
-	else if (scripts->contains(type)) scripts->validate(section, key, value, type);
+	else if (scripts && scripts->contains(type)) scripts->validate(section, key, value, type);
 	else Log::print<_TypeNotExist>({ value.line }, type);
 }
 

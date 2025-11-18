@@ -15,7 +15,7 @@ public:
 	static Checker* Instance;
 	static std::atomic<size_t> ProcessedSections;
 
-	Checker(IniFile& configFile, IniFile& targetIni);
+	Checker(IniFile& configFile, IniFile& targetIni, bool allowCustomChecker = true);
 	void loadConfig(IniFile& configFile);
 	void checkFile();
 

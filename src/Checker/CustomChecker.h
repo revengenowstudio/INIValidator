@@ -1,12 +1,13 @@
 ﻿#pragma once
 #include "IniFile.h"
-#include <Python.h>
 #include <string>
 #include <tuple>
 #include <unordered_map>
 #include <unordered_set>
 #include <memory>
 #include <filesystem>
+
+typedef struct _object PyObject;
 
 class CustomChecker {
 public:

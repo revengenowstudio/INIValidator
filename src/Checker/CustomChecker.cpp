@@ -2,6 +2,14 @@
 #include "Log.h"
 #include <iostream>
 
+#ifdef _DEBUG
+#undef _DEBUG
+#include <Python.h>
+#define _DEBUG
+#else
+#include <Python.h>
+#endif
+
 std::unordered_map<std::string, Section> CustomChecker::globalSections_;
 std::mutex globalSectionsMutex_;
 
