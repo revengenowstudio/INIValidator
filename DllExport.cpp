@@ -23,9 +23,8 @@ bool Validator::Validate(
 	const std::string& targetFilePath,
 	ValidateResults& errors,
 	ValidateResults& others) {
-	if (!configIni) {
+	if (!configIni)
 		return false;
-	}
 	IniFile targetIni;
 	IniFile::FileType = "rules";
 	targetIni.load(targetFilePath, true);

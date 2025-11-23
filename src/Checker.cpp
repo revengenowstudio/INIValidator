@@ -13,9 +13,9 @@ std::atomic<size_t> Checker::ProcessedSections(0);
 Checker::Checker(IniFile& configFile, IniFile& targetIni, bool allowCustomChecker) : targetIni(&targetIni) {
 	loadConfig(configFile);
 	Instance = this;
-	if (allowCustomChecker) {
+	if (allowCustomChecker)
 		scripts = std::make_unique<CustomChecker>("Scripts", targetIni);
-	}
+
 }
 
 // 加载配置文件
