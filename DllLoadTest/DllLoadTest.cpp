@@ -15,14 +15,18 @@ int main()
 	validator.LoadBootSetting("Settings.ini");
 	validator.ReloadConfigRule("INICodingCheck.ini");
 
-	Validator::ValidateResults errors, others;
-	auto const successful = validator.Validate("Test.ini", errors, others);
+	Validator::ValidationResults results;
+	auto const successful = validator.Validate("Test.ini", results);
 	cout << endl << "successful: " << successful << endl;
 
-	for (auto const& err : errors) {
+	for (auto const& err : results[Validator::ErrorSeverity.ToInteger()].details) {
 		cout << err << endl;
 	}
-	for (auto const& msg : others) {
-		cout << msg << endl;
+	for (auto idx = 0u; idx < ValidationSeverity::Error; ++idx) {
+		auto const& report = results[idx];
+		cout << "---" << report.severity << "---" << endl;
+		for (auto const& msg : report.details) {
+			cout << msg << endl;
+		}
 	}
 }

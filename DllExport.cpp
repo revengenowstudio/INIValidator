@@ -21,8 +21,7 @@ void Validator::ReloadConfigRule(const std::string& path) {
 
 bool Validator::Validate(
 	const std::string& targetFilePath,
-	ValidateResults& errors,
-	ValidateResults& others) {
+	ValidationResults& results) {
 	if (!configIni)
 		return false;
 	IniFile targetIni;
@@ -31,16 +30,17 @@ bool Validator::Validate(
 	Checker checker(*configIni, targetIni, false);
 	checker.checkFile();
 
-	size_t errCount = 0;
-	for (const auto& log : Log::Logs) {
-		auto&& msg = log.getFileMessage();
-		if (log.getSeverity() == Severity::ERROR) {
-			errCount++;
-			errors.emplace_back(std::move(msg));
-			continue;
-		}
-		others.emplace_back(std::move(msg));
+	results.resize(static_cast<int>(ValidationSeverity::__Count));
+	for (auto idx = 0u; idx < ValidationSeverity::__Count; ++idx) {
+		results[idx].severity = ValidationSeverity(idx);
 	}
 
-	return errCount == 0;
+	for (const auto& log : Log::Logs) {
+		auto&& msg = log.getFileMessage();
+		auto const severity = static_cast<int>(log.getSeverity());
+		auto& result = results[severity];
+		result.details.emplace_back(std::move(msg));
+	}
+
+	return results[static_cast<int>(ValidationSeverity::Error)].details.size() == 0;
 }
